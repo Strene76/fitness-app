@@ -1,4 +1,7 @@
-<!DOCTYPE html>
+if (workouts.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-8 text-gray-500">
+                        <i class="fas fa-bolt text-3xl mb-3 opacity-50"></i<!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
@@ -8,75 +11,75 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body class="bg-gray-50">
-    <div class="max-w-md mx-auto bg-gray-50 min-h-screen">
+    <div class="max-w-md mx-auto bg-gray-50 h-screen flex flex-col">
         <!-- Header -->
-        <div class="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-6">
-            <h1 class="text-2xl font-bold text-center">💪 Pompes & Gainage</h1>
-            <p class="text-center text-blue-100 mt-2">Votre coach personnel</p>
+        <div class="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-4">
+            <h1 class="text-xl font-bold text-center">💪 Pompes & Gainage</h1>
+            <p class="text-center text-blue-100 mt-1 text-sm">Votre coach personnel</p>
         </div>
 
         <!-- Navigation -->
         <div class="bg-white shadow-sm border-b">
             <div class="flex">
-                <button onclick="setActiveTab('workout')" id="tab-workout" class="flex-1 py-4 px-4 text-center font-medium text-blue-600 border-b-2 border-blue-600 bg-blue-50">
-                    <i class="fas fa-stopwatch text-lg mb-1 block"></i>
-                    <span class="text-sm">Entraînement</span>
+                <button onclick="setActiveTab('workout')" id="tab-workout" class="flex-1 py-3 px-2 text-center font-medium text-blue-600 border-b-2 border-blue-600 bg-blue-50">
+                    <i class="fas fa-stopwatch text-sm mb-1 block"></i>
+                    <span class="text-xs">Entraînement</span>
                 </button>
-                <button onclick="setActiveTab('history')" id="tab-history" class="flex-1 py-4 px-4 text-center font-medium text-gray-500 hover:text-gray-700">
-                    <i class="fas fa-calendar-alt text-lg mb-1 block"></i>
-                    <span class="text-sm">Historique</span>
+                <button onclick="setActiveTab('history')" id="tab-history" class="flex-1 py-3 px-2 text-center font-medium text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-calendar-alt text-sm mb-1 block"></i>
+                    <span class="text-xs">Historique</span>
                 </button>
-                <button onclick="setActiveTab('stats')" id="tab-stats" class="flex-1 py-4 px-4 text-center font-medium text-gray-500 hover:text-gray-700">
-                    <i class="fas fa-chart-line text-lg mb-1 block"></i>
-                    <span class="text-sm">Stats</span>
+                <button onclick="setActiveTab('stats')" id="tab-stats" class="flex-1 py-3 px-2 text-center font-medium text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-chart-line text-sm mb-1 block"></i>
+                    <span class="text-xs">Stats</span>
                 </button>
             </div>
         </div>
 
         <!-- Contenu -->
-        <div class="p-4 pb-8">
+        <div class="flex-1 overflow-y-auto">
             <!-- Onglet Entraînement -->
-            <div id="workout-tab" class="tab-content">
+            <div id="workout-tab" class="tab-content p-3 space-y-3">
                 <!-- Stats du jour -->
-                <div class="bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl p-4 text-white mb-6">
-                    <h2 class="text-lg font-bold mb-3">Aujourd'hui</h2>
-                    <div class="grid grid-cols-2 gap-4">
+                <div class="bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg p-3 text-white">
+                    <h2 class="text-sm font-bold mb-2">Aujourd'hui</h2>
+                    <div class="grid grid-cols-2 gap-3">
                         <div>
-                            <div id="today-pushups" class="text-2xl font-bold">0</div>
-                            <div class="text-sm opacity-90">Pompes (/<span id="goal-pushups">50</span>)</div>
-                            <div class="w-full bg-white bg-opacity-30 rounded-full h-2 mt-1">
-                                <div id="progress-pushups" class="bg-white h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
+                            <div id="today-pushups" class="text-lg font-bold">0</div>
+                            <div class="text-xs opacity-90">Pompes (/<span id="goal-pushups">50</span>)</div>
+                            <div class="w-full bg-white bg-opacity-30 rounded-full h-1.5 mt-1">
+                                <div id="progress-pushups" class="bg-white h-1.5 rounded-full transition-all duration-500" style="width: 0%"></div>
                             </div>
                         </div>
                         <div>
-                            <div id="today-plank" class="text-2xl font-bold">0:00</div>
-                            <div class="text-sm opacity-90">Gainage (/<span id="goal-plank">2:00</span>)</div>
-                            <div class="w-full bg-white bg-opacity-30 rounded-full h-2 mt-1">
-                                <div id="progress-plank" class="bg-white h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
+                            <div id="today-plank" class="text-lg font-bold">0:00</div>
+                            <div class="text-xs opacity-90">Gainage (/<span id="goal-plank">2:00</span>)</div>
+                            <div class="w-full bg-white bg-opacity-30 rounded-full h-1.5 mt-1">
+                                <div id="progress-plank" class="bg-white h-1.5 rounded-full transition-all duration-500" style="width: 0%"></div>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Compteur Pompes -->
-                <div class="bg-white rounded-xl p-6 shadow-lg mb-6">
-                    <div class="flex items-center justify-between mb-4">
-                        <h3 class="text-xl font-bold text-gray-800">💪 Pompes</h3>
-                        <div class="bg-blue-100 px-3 py-1 rounded-full">
-                            <span id="pushup-badge" class="text-blue-600 font-semibold">0</span>
+                <div class="bg-white rounded-lg p-4 shadow">
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="text-lg font-bold text-gray-800">💪 Pompes</h3>
+                        <div class="bg-blue-100 px-2 py-1 rounded-full">
+                            <span id="pushup-badge" class="text-blue-600 font-semibold text-sm">0</span>
                         </div>
                     </div>
                     
                     <div class="text-center">
-                        <div id="pushup-display" class="text-6xl font-bold text-blue-600 mb-6">0</div>
-                        <div class="flex gap-3 justify-center">
-                            <button onclick="decrementPushups()" id="pushup-minus" class="bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors" disabled>
+                        <div id="pushup-display" class="text-4xl font-bold text-blue-600 mb-3">0</div>
+                        <div class="flex gap-2 justify-center">
+                            <button onclick="decrementPushups()" id="pushup-minus" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-semibold transition-colors text-sm" disabled>
                                 -1
                             </button>
-                            <button onclick="incrementPushups()" class="bg-green-500 hover:bg-green-600 text-white px-8 py-3 rounded-lg font-semibold text-lg transition-colors">
+                            <button onclick="incrementPushups()" class="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-lg font-semibold transition-colors">
                                 +1
                             </button>
-                            <button onclick="addPushups(5)" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors">
+                            <button onclick="addPushups(5)" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold transition-colors text-sm">
                                 +5
                             </button>
                         </div>
@@ -84,22 +87,22 @@
                 </div>
 
                 <!-- Chrono Gainage -->
-                <div class="bg-white rounded-xl p-6 shadow-lg mb-6">
-                    <div class="flex items-center justify-between mb-4">
-                        <h3 class="text-xl font-bold text-gray-800">⏱️ Gainage</h3>
-                        <div id="plank-status" class="px-3 py-1 rounded-full bg-gray-100">
-                            <span class="font-semibold text-gray-600">ARRÊTÉ</span>
+                <div class="bg-white rounded-lg p-4 shadow">
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="text-lg font-bold text-gray-800">⏱️ Gainage</h3>
+                        <div id="plank-status" class="px-2 py-1 rounded-full bg-gray-100">
+                            <span class="font-semibold text-gray-600 text-xs">ARRÊTÉ</span>
                         </div>
                     </div>
                     
                     <div class="text-center">
-                        <div id="plank-display" class="text-6xl font-bold mb-6 text-gray-600">0:00</div>
-                        <div class="flex gap-3 justify-center">
-                            <button onclick="resetPlank()" class="bg-gray-500 hover:bg-gray-600 text-white p-3 rounded-lg transition-colors" title="Reset">
-                                <i class="fas fa-redo"></i>
+                        <div id="plank-display" class="text-4xl font-bold mb-3 text-gray-600">0:00</div>
+                        <div class="flex gap-2 justify-center">
+                            <button onclick="resetPlank()" class="bg-gray-500 hover:bg-gray-600 text-white p-2 rounded-lg transition-colors" title="Reset">
+                                <i class="fas fa-redo text-sm"></i>
                             </button>
-                            <button onclick="togglePlank()" id="plank-toggle" class="px-8 py-3 rounded-lg font-semibold text-lg flex items-center gap-2 transition-colors bg-green-500 hover:bg-green-600 text-white">
-                                <i class="fas fa-play"></i>
+                            <button onclick="togglePlank()" id="plank-toggle" class="px-6 py-2 rounded-lg font-semibold flex items-center gap-2 transition-colors bg-green-500 hover:bg-green-600 text-white">
+                                <i class="fas fa-play text-sm"></i>
                                 START
                             </button>
                         </div>
@@ -107,56 +110,56 @@
                 </div>
 
                 <!-- Bouton sauvegarder -->
-                <button onclick="saveWorkout()" id="save-btn" class="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white py-4 rounded-xl font-bold text-lg shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                <button onclick="saveWorkout()" id="save-btn" class="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white py-3 rounded-lg font-bold shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed">
                     💾 SAUVEGARDER LA SÉANCE
                 </button>
             </div>
 
             <!-- Onglet Historique -->
-            <div id="history-tab" class="tab-content hidden">
-                <h2 class="text-2xl font-bold text-gray-800 mb-4">📈 Historique</h2>
-                <div id="workouts-list" class="space-y-3">
+            <div id="history-tab" class="tab-content hidden p-3">
+                <h2 class="text-xl font-bold text-gray-800 mb-3">📈 Historique</h2>
+                <div id="workouts-list" class="space-y-2">
                     <!-- Les séances seront ajoutées ici dynamiquement -->
                 </div>
             </div>
 
             <!-- Onglet Stats -->
-            <div id="stats-tab" class="tab-content hidden">
-                <h2 class="text-2xl font-bold text-gray-800 mb-4">📊 Statistiques</h2>
+            <div id="stats-tab" class="tab-content hidden p-3 space-y-4">
+                <h2 class="text-xl font-bold text-gray-800 mb-3">📊 Statistiques</h2>
                 
                 <!-- Stats générales -->
-                <div class="grid grid-cols-2 gap-4 mb-6">
-                    <div class="bg-gradient-to-br from-blue-500 to-blue-600 p-4 rounded-xl text-white">
-                        <div id="total-pushups" class="text-2xl font-bold">0</div>
-                        <div class="text-sm opacity-90">Total pompes</div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="bg-gradient-to-br from-blue-500 to-blue-600 p-3 rounded-lg text-white">
+                        <div id="total-pushups" class="text-xl font-bold">0</div>
+                        <div class="text-xs opacity-90">Total pompes</div>
                     </div>
-                    <div class="bg-gradient-to-br from-green-500 to-green-600 p-4 rounded-xl text-white">
-                        <div id="total-plank" class="text-2xl font-bold">0:00</div>
-                        <div class="text-sm opacity-90">Total gainage</div>
+                    <div class="bg-gradient-to-br from-green-500 to-green-600 p-3 rounded-lg text-white">
+                        <div id="total-plank" class="text-xl font-bold">0:00</div>
+                        <div class="text-xs opacity-90">Total gainage</div>
                     </div>
-                    <div class="bg-gradient-to-br from-purple-500 to-purple-600 p-4 rounded-xl text-white">
-                        <div id="total-sessions" class="text-2xl font-bold">0</div>
-                        <div class="text-sm opacity-90">Séances</div>
+                    <div class="bg-gradient-to-br from-purple-500 to-purple-600 p-3 rounded-lg text-white">
+                        <div id="total-sessions" class="text-xl font-bold">0</div>
+                        <div class="text-xs opacity-90">Séances</div>
                     </div>
-                    <div class="bg-gradient-to-br from-pink-500 to-pink-600 p-4 rounded-xl text-white">
-                        <div id="avg-pushups" class="text-2xl font-bold">0</div>
-                        <div class="text-sm opacity-90">Moy. pompes</div>
+                    <div class="bg-gradient-to-br from-pink-500 to-pink-600 p-3 rounded-lg text-white">
+                        <div id="avg-pushups" class="text-xl font-bold">0</div>
+                        <div class="text-xs opacity-90">Moy. pompes</div>
                     </div>
                 </div>
 
                 <!-- Objectifs -->
-                <div class="bg-white p-6 rounded-xl shadow">
-                    <h3 class="font-bold text-lg mb-4">🎯 Objectifs quotidiens</h3>
-                    <div class="space-y-4">
+                <div class="bg-white p-4 rounded-lg shadow">
+                    <h3 class="font-bold text-lg mb-3">🎯 Objectifs quotidiens</h3>
+                    <div class="space-y-3">
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">
                                 Pompes par jour: <span id="pushup-goal-value">50</span>
                             </label>
                             <input type="range" id="pushup-goal-slider" min="10" max="200" step="5" value="50" 
                                    class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">
                                 Gainage par jour: <span id="plank-goal-value">2:00</span>
                             </label>
                             <input type="range" id="plank-goal-slider" min="30" max="600" step="15" value="120"
@@ -191,7 +194,6 @@
   messagingSenderId: "280277740696",
   appId: "1:280277740696:web:d3cedc8349cc71ee3174ed"
 };
-
 
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
@@ -410,23 +412,23 @@
             }
 
             container.innerHTML = workouts.slice(0, 10).map(workout => `
-                <div class="bg-white p-4 rounded-lg shadow border">
+                <div class="bg-white p-3 rounded-lg shadow border">
                     <div class="flex justify-between items-start mb-2">
-                        <div class="text-sm text-gray-500">${workout.timestamp}</div>
+                        <div class="text-xs text-gray-500">${workout.timestamp}</div>
                         <button onclick="deleteWorkout('${workout.id}')" 
-                                class="text-red-500 hover:text-red-700 hover:bg-red-50 p-2 rounded-full transition-colors"
+                                class="text-red-500 hover:text-red-700 hover:bg-red-50 p-1 rounded-full transition-colors"
                                 title="Supprimer cette séance">
-                            <i class="fas fa-trash text-sm"></i>
+                            <i class="fas fa-trash text-xs"></i>
                         </button>
                     </div>
-                    <div class="grid grid-cols-2 gap-4">
+                    <div class="grid grid-cols-2 gap-3">
                         <div class="flex items-center gap-2">
-                            <div class="w-3 h-3 bg-blue-500 rounded-full"></div>
-                            <span class="font-semibold">${workout.pushups} pompes</span>
+                            <div class="w-2 h-2 bg-blue-500 rounded-full"></div>
+                            <span class="font-semibold text-sm">${workout.pushups} pompes</span>
                         </div>
                         <div class="flex items-center gap-2">
-                            <div class="w-3 h-3 bg-green-500 rounded-full"></div>
-                            <span class="font-semibold">${formatTime(workout.plankTime)} gainage</span>
+                            <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+                            <span class="font-semibold text-sm">${formatTime(workout.plankTime)} gainage</span>
                         </div>
                     </div>
                 </div>
@@ -451,9 +453,9 @@
             
             // Mise à jour des boutons
             document.querySelectorAll('[id^="tab-"]').forEach(btn => {
-                btn.className = 'flex-1 py-4 px-4 text-center font-medium text-gray-500 hover:text-gray-700';
+                btn.className = 'flex-1 py-3 px-2 text-center font-medium text-gray-500 hover:text-gray-700';
             });
-            document.getElementById(`tab-${tab}`).className = 'flex-1 py-4 px-4 text-center font-medium text-blue-600 border-b-2 border-blue-600 bg-blue-50';
+            document.getElementById(`tab-${tab}`).className = 'flex-1 py-3 px-2 text-center font-medium text-blue-600 border-b-2 border-blue-600 bg-blue-50';
             
             // Mise à jour du contenu
             document.querySelectorAll('.tab-content').forEach(content => {
