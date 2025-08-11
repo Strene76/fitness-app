@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💪 Pompes & Gainage</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="bg-gray-50">
+    <div class="max-w-md mx-auto bg-gray-50 min-h-screen">
+        <!-- Header -->
+        <div class="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-6">
+            <h1 class="text-2xl font-bold text-center">💪 Pompes & Gainage</h1>
+            <p class="text-center text-blue-100 mt-2">Votre coach personnel</p>
+        </div>
+
+        <!-- Navigation -->
+        <div class="bg-white shadow-sm border-b">
+            <div class="flex">
+                <button onclick="setActiveTab('workout')" id="tab-workout" class="flex-1 py-4 px-4 text-center font-medium text-blue-600 border-b-2 border-blue-600 bg-blue-50">
+                    <i class="fas fa-stopwatch text-lg mb-1 block"></i>
+                    <span class="text-sm">Entraînement</span>
+                </button>
+                <button onclick="setActiveTab('history')" id="tab-history" class="flex-1 py-4 px-4 text-center font-medium text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-calendar-alt text-lg mb-1 block"></i>
+                    <span class="text-sm">Historique</span>
+                </button>
+                <button onclick="setActiveTab('stats')" id="tab-stats" class="flex-1 py-4 px-4 text-center font-medium text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-chart-line text-lg mb-1 block"></i>
+                    <span class="text-sm">Stats</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Contenu -->
+        <div class="p-4 pb-8">
+            <!-- Onglet Entraînement -->
+            <div id="workout-tab" class="tab-content">
+                <!-- Stats du jour -->
+                <div class="bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl p-4 text-white mb-6">
+                    <h2 class="text-lg font-bold mb-3">Aujourd'hui</h2>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <div id="today-pushups" class="text-2xl font-bold">0</div>
+                            <div class="text-sm opacity-90">Pompes (/<span id="goal-pushups">50</span>)</div>
+                            <div class="w-full bg-white bg-opacity-30 rounded-full h-2 mt-1">
+                                <div id="progress-pushups" class="bg-white h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div id="today-plank" class="text-2xl font-bold">0:00</div>
+                            <div class="text-sm opacity-90">Gainage (/<span id="goal-plank">2:00</span>)</div>
+                            <div class="w-full bg-white bg-opacity-30 rounded-full h-2 mt-1">
+                                <div id="progress-plank" class="bg-white h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Compteur Pompes -->
+                <div class="bg-white rounded-xl p-6 shadow-lg mb-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-xl font-bold text-gray-800">💪 Pompes</h3>
+                        <div class="bg-blue-100 px-3 py-1 rounded-full">
+                            <span id="pushup-badge" class="text-blue-600 font-semibold">0</span>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center">
+                        <div id="pushup-display" class="text-6xl font-bold text-blue-600 mb-6">0</div>
+                        <div class="flex gap-3 justify-center">
+                            <button onclick="decrementPushups()" id="pushup-minus" class="bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors" disabled>
+                                -1
+                            </button>
+                            <button onclick="incrementPushups()" class="bg-green-500 hover:bg-green-600 text-white px-8 py-3 rounded-lg font-semibold text-lg transition-colors">
+                                +1
+                            </button>
+                            <button onclick="addPushups(5)" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors">
+                                +5
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chrono Gainage -->
+                <div class="bg-white rounded-xl p-6 shadow-lg mb-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-xl font-bold text-gray-800">⏱️ Gainage</h3>
+                        <div id="plank-status" class="px-3 py-1 rounded-full bg-gray-100">
+                            <span class="font-semibold text-gray-600">ARRÊTÉ</span>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center">
+                        <div id="plank-display" class="text-6xl font-bold mb-6 text-gray-600">0:00</div>
+                        <div class="flex gap-3 justify-center">
+                            <button onclick="resetPlank()" class="bg-gray-500 hover:bg-gray-600 text-white p-3 rounded-lg transition-colors" title="Reset">
+                                <i class="fas fa-redo"></i>
+                            </button>
+                            <button onclick="togglePlank()" id="plank-toggle" class="px-8 py-3 rounded-lg font-semibold text-lg flex items-center gap-2 transition-colors bg-green-500 hover:bg-green-600 text-white">
+                                <i class="fas fa-play"></i>
+                                START
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bouton sauvegarder -->
+                <button onclick="saveWorkout()" id="save-btn" class="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white py-4 rounded-xl font-bold text-lg shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                    💾 SAUVEGARDER LA SÉANCE
+                </button>
+            </div>
+
+            <!-- Onglet Historique -->
+            <div id="history-tab" class="tab-content hidden">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">📈 Historique</h2>
+                <div id="workouts-list" class="space-y-3">
+                    <!-- Les séances seront ajoutées ici dynamiquement -->
+                </div>
+            </div>
+
+            <!-- Onglet Stats -->
+            <div id="stats-tab" class="tab-content hidden">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">📊 Statistiques</h2>
+                
+                <!-- Stats générales -->
+                <div class="grid grid-cols-2 gap-4 mb-6">
+                    <div class="bg-gradient-to-br from-blue-500 to-blue-600 p-4 rounded-xl text-white">
+                        <div id="total-pushups" class="text-2xl font-bold">0</div>
+                        <div class="text-sm opacity-90">Total pompes</div>
+                    </div>
+                    <div class="bg-gradient-to-br from-green-500 to-green-600 p-4 rounded-xl text-white">
+                        <div id="total-plank" class="text-2xl font-bold">0:00</div>
+                        <div class="text-sm opacity-90">Total gainage</div>
+                    </div>
+                    <div class="bg-gradient-to-br from-purple-500 to-purple-600 p-4 rounded-xl text-white">
+                        <div id="total-sessions" class="text-2xl font-bold">0</div>
+                        <div class="text-sm opacity-90">Séances</div>
+                    </div>
+                    <div class="bg-gradient-to-br from-pink-500 to-pink-600 p-4 rounded-xl text-white">
+                        <div id="avg-pushups" class="text-2xl font-bold">0</div>
+                        <div class="text-sm opacity-90">Moy. pompes</div>
+                    </div>
+                </div>
+
+                <!-- Objectifs -->
+                <div class="bg-white p-6 rounded-xl shadow">
+                    <h3 class="font-bold text-lg mb-4">🎯 Objectifs quotidiens</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Pompes par jour: <span id="pushup-goal-value">50</span>
+                            </label>
+                            <input type="range" id="pushup-goal-slider" min="10" max="200" step="5" value="50" 
+                                   class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Gainage par jour: <span id="plank-goal-value">2:00</span>
+                            </label>
+                            <input type="range" id="plank-goal-slider" min="30" max="600" step="15" value="120"
+                                   class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading overlay -->
+    <div id="loading" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+        <div class="bg-white p-6 rounded-xl text-center">
+            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
+            <p>Connexion à Firebase...</p>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        // Import Firebase modules
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, query, orderBy } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+        // Configuration Firebase - REMPLACEZ avec vos propres clés
+        const firebaseConfig = {
+  apiKey: "AIzaSyD11MBNfS-eI4B4UR7b6gPtHo7zfN6CgME",
+  authDomain: "fitness-app-b437f.firebaseapp.com",
+  projectId: "fitness-app-b437f",
+  storageBucket: "fitness-app-b437f.firebasestorage.app",
+  messagingSenderId: "280277740696",
+  appId: "1:280277740696:web:d3cedc8349cc71ee3174ed"
+};
+
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Variables globales
+        let activeTab = 'workout';
+        let pushupCount = 0;
+        let plankTime = 0;
+        let isPlankActive = false;
+        let plankInterval = null;
+        let workouts = [];
+        let dailyGoal = { pushups: 50, plank: 120 };
+
+        // Fonction pour formater le temps
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            return `${mins}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        // Fonction pour obtenir la date du jour
+        function getTodayDate() {
+            return new Date().toISOString().split('T')[0];
+        }
+
+        // Fonction pour obtenir les stats du jour
+        function getTodayStats() {
+            const today = getTodayDate();
+            const todayWorkouts = workouts.filter(w => w.date === today);
+            const totalPushups = todayWorkouts.reduce((sum, w) => sum + w.pushups, 0) + pushupCount;
+            const totalPlank = todayWorkouts.reduce((sum, w) => sum + w.plankTime, 0) + plankTime;
+            return { totalPushups, totalPlank };
+        }
+
+        // Mise à jour de l'affichage
+        function updateDisplay() {
+            // Mise à jour du compteur de pompes
+            document.getElementById('pushup-display').textContent = pushupCount;
+            document.getElementById('pushup-badge').textContent = pushupCount;
+            document.getElementById('pushup-minus').disabled = pushupCount === 0;
+
+            // Mise à jour du chrono gainage
+            document.getElementById('plank-display').textContent = formatTime(plankTime);
+            document.getElementById('plank-display').className = `text-6xl font-bold mb-6 ${isPlankActive ? 'text-green-600' : 'text-gray-600'}`;
+
+            // Mise à jour du statut du gainage
+            const statusDiv = document.getElementById('plank-status');
+            if (isPlankActive) {
+                statusDiv.className = 'px-3 py-1 rounded-full bg-green-100';
+                statusDiv.innerHTML = '<span class="font-semibold text-green-600">EN COURS</span>';
+            } else {
+                statusDiv.className = 'px-3 py-1 rounded-full bg-gray-100';
+                statusDiv.innerHTML = '<span class="font-semibold text-gray-600">ARRÊTÉ</span>';
+            }
+
+            // Mise à jour du bouton plank
+            const toggleBtn = document.getElementById('plank-toggle');
+            if (isPlankActive) {
+                toggleBtn.className = 'px-8 py-3 rounded-lg font-semibold text-lg flex items-center gap-2 transition-colors bg-red-500 hover:bg-red-600 text-white';
+                toggleBtn.innerHTML = '<i class="fas fa-pause"></i> PAUSE';
+            } else {
+                toggleBtn.className = 'px-8 py-3 rounded-lg font-semibold text-lg flex items-center gap-2 transition-colors bg-green-500 hover:bg-green-600 text-white';
+                toggleBtn.innerHTML = '<i class="fas fa-play"></i> START';
+            }
+
+            // Mise à jour des stats du jour
+            const { totalPushups, totalPlank } = getTodayStats();
+            document.getElementById('today-pushups').textContent = totalPushups;
+            document.getElementById('today-plank').textContent = formatTime(totalPlank);
+
+            // Mise à jour des barres de progression
+            const pushupsProgress = Math.min(100, (totalPushups / dailyGoal.pushups) * 100);
+            const plankProgress = Math.min(100, (totalPlank / dailyGoal.plank) * 100);
+            document.getElementById('progress-pushups').style.width = `${pushupsProgress}%`;
+            document.getElementById('progress-plank').style.width = `${plankProgress}%`;
+
+            // Mise à jour du bouton sauvegarder
+            document.getElementById('save-btn').disabled = pushupCount === 0 && plankTime === 0;
+        }
+
+        // Fonction pour gérer les pompes
+        window.incrementPushups = function() {
+            pushupCount++;
+            updateDisplay();
+        };
+
+        window.decrementPushups = function() {
+            if (pushupCount > 0) {
+                pushupCount--;
+                updateDisplay();
+            }
+        };
+
+        window.addPushups = function(amount) {
+            pushupCount += amount;
+            updateDisplay();
+        };
+
+        // Fonction pour gérer le gainage
+        window.togglePlank = function() {
+            if (isPlankActive) {
+                clearInterval(plankInterval);
+                plankInterval = null;
+                isPlankActive = false;
+            } else {
+                plankInterval = setInterval(() => {
+                    plankTime++;
+                    updateDisplay();
+                }, 1000);
+                isPlankActive = true;
+            }
+            updateDisplay();
+        };
+
+        window.resetPlank = function() {
+            plankTime = 0;
+            isPlankActive = false;
+            if (plankInterval) {
+                clearInterval(plankInterval);
+                plankInterval = null;
+            }
+            updateDisplay();
+        };
+
+        // Fonction pour sauvegarder une séance
+        window.saveWorkout = async function() {
+            if (pushupCount === 0 && plankTime === 0) return;
+
+            document.getElementById('loading').classList.remove('hidden');
+            
+            try {
+                const newWorkout = {
+                    date: getTodayDate(),
+                    pushups: pushupCount,
+                    plankTime: plankTime,
+                    timestamp: new Date().toLocaleString('fr-FR'),
+                    createdAt: new Date()
+                };
+
+                await addDoc(collection(db, 'workouts'), newWorkout);
+                
+                // Reset des valeurs
+                pushupCount = 0;
+                plankTime = 0;
+                isPlankActive = false;
+                
+                if (plankInterval) {
+                    clearInterval(plankInterval);
+                    plankInterval = null;
+                }
+                
+                await loadWorkouts();
+                updateDisplay();
+                updateStats();
+                
+                alert('Séance sauvegardée ! 🎉');
+            } catch (error) {
+                console.error('Erreur lors de la sauvegarde:', error);
+                alert('Erreur lors de la sauvegarde. Vérifiez votre configuration Firebase.');
+            } finally {
+                document.getElementById('loading').classList.add('hidden');
+            }
+        };
+
+        // Fonction pour charger les séances
+        async function loadWorkouts() {
+            try {
+                const q = query(collection(db, 'workouts'), orderBy('createdAt', 'desc'));
+                const querySnapshot = await getDocs(q);
+                workouts = [];
+                querySnapshot.forEach((doc) => {
+                    workouts.push({ id: doc.id, ...doc.data() });
+                });
+                updateHistoryDisplay();
+            } catch (error) {
+                console.error('Erreur lors du chargement:', error);
+                // Fallback sur le localStorage si Firebase échoue
+                const saved = localStorage.getItem('fitness-workouts');
+                workouts = saved ? JSON.parse(saved) : [];
+                updateHistoryDisplay();
+            }
+        }
+
+        // Fonction pour supprimer une séance
+        window.deleteWorkout = async function(workoutId) {
+            if (!confirm('Êtes-vous sûr de vouloir supprimer cette séance ?')) return;
+            
+            document.getElementById('loading').classList.remove('hidden');
+            
+            try {
+                await deleteDoc(doc(db, 'workouts', workoutId));
+                await loadWorkouts();
+                updateStats();
+            } catch (error) {
+                console.error('Erreur lors de la suppression:', error);
+                alert('Erreur lors de la suppression');
+            } finally {
+                document.getElementById('loading').classList.add('hidden');
+            }
+        };
+
+        // Fonction pour mettre à jour l'affichage de l'historique
+        function updateHistoryDisplay() {
+            const container = document.getElementById('workouts-list');
+            
+            if (workouts.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-12 text-gray-500">
+                        <i class="fas fa-bolt text-4xl mb-4 opacity-50"></i>
+                        <p class="text-lg mb-2">Aucune séance enregistrée</p>
+                        <p class="text-sm">Commencez votre premier entraînement !</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = workouts.slice(0, 10).map(workout => `
+                <div class="bg-white p-4 rounded-lg shadow border">
+                    <div class="flex justify-between items-start mb-2">
+                        <div class="text-sm text-gray-500">${workout.timestamp}</div>
+                        <button onclick="deleteWorkout('${workout.id}')" 
+                                class="text-red-500 hover:text-red-700 hover:bg-red-50 p-2 rounded-full transition-colors"
+                                title="Supprimer cette séance">
+                            <i class="fas fa-trash text-sm"></i>
+                        </button>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="flex items-center gap-2">
+                            <div class="w-3 h-3 bg-blue-500 rounded-full"></div>
+                            <span class="font-semibold">${workout.pushups} pompes</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <div class="w-3 h-3 bg-green-500 rounded-full"></div>
+                            <span class="font-semibold">${formatTime(workout.plankTime)} gainage</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Fonction pour mettre à jour les statistiques
+        function updateStats() {
+            const totalPushups = workouts.reduce((sum, w) => sum + w.pushups, 0);
+            const totalPlankTime = workouts.reduce((sum, w) => sum + w.plankTime, 0);
+            const avgPushups = workouts.length > 0 ? Math.round(totalPushups / workouts.length) : 0;
+
+            document.getElementById('total-pushups').textContent = totalPushups;
+            document.getElementById('total-plank').textContent = formatTime(totalPlankTime);
+            document.getElementById('total-sessions').textContent = workouts.length;
+            document.getElementById('avg-pushups').textContent = avgPushups;
+        }
+
+        // Gestion des onglets
+        window.setActiveTab = function(tab) {
+            activeTab = tab;
+            
+            // Mise à jour des boutons
+            document.querySelectorAll('[id^="tab-"]').forEach(btn => {
+                btn.className = 'flex-1 py-4 px-4 text-center font-medium text-gray-500 hover:text-gray-700';
+            });
+            document.getElementById(`tab-${tab}`).className = 'flex-1 py-4 px-4 text-center font-medium text-blue-600 border-b-2 border-blue-600 bg-blue-50';
+            
+            // Mise à jour du contenu
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.add('hidden');
+            });
+            document.getElementById(`${tab}-tab`).classList.remove('hidden');
+
+            if (tab === 'history') {
+                updateHistoryDisplay();
+            } else if (tab === 'stats') {
+                updateStats();
+            }
+        };
+
+        // Gestion des objectifs
+        document.getElementById('pushup-goal-slider').addEventListener('input', function(e) {
+            dailyGoal.pushups = parseInt(e.target.value);
+            document.getElementById('pushup-goal-value').textContent = dailyGoal.pushups;
+            document.getElementById('goal-pushups').textContent = dailyGoal.pushups;
+            updateDisplay();
+            localStorage.setItem('fitness-goals', JSON.stringify(dailyGoal));
+        });
+
+        document.getElementById('plank-goal-slider').addEventListener('input', function(e) {
+            dailyGoal.plank = parseInt(e.target.value);
+            document.getElementById('plank-goal-value').textContent = formatTime(dailyGoal.plank);
+            document.getElementById('goal-plank').textContent = formatTime(dailyGoal.plank);
+            updateDisplay();
+            localStorage.setItem('fitness-goals', JSON.stringify(dailyGoal));
+        });
+
+        // Chargement des objectifs depuis localStorage
+        function loadGoals() {
+            const saved = localStorage.getItem('fitness-goals');
+            if (saved) {
+                dailyGoal = JSON.parse(saved);
+                document.getElementById('pushup-goal-slider').value = dailyGoal.pushups;
+                document.getElementById('plank-goal-slider').value = dailyGoal.plank;
+                document.getElementById('pushup-goal-value').textContent = dailyGoal.pushups;
+                document.getElementById('plank-goal-value').textContent = formatTime(dailyGoal.plank);
+                document.getElementById('goal-pushups').textContent = dailyGoal.pushups;
+                document.getElementById('goal-plank').textContent = formatTime(dailyGoal.plank);
+            }
+        }
+
+        // Initialisation de l'application
+        async function initApp() {
+            document.getElementById('loading').classList.remove('hidden');
+            
+            try {
+                loadGoals();
+                await loadWorkouts();
+                updateDisplay();
+                updateStats();
+            } catch (error) {
+                console.error('Erreur d\'initialisation:', error);
+                alert('Erreur de connexion à Firebase. Vérifiez votre configuration.');
+            } finally {
+                document.getElementById('loading').classList.add('hidden');
+            }
+        }
+
+        // Nettoyage avant fermeture
+        window.addEventListener('beforeunload', function() {
+            if (plankInterval) {
+                clearInterval(plankInterval);
+            }
+        });
+
+        // Démarrage de l'application
+        initApp();
+    </script>
+</body>
+</html>
