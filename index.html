@@ -6,6 +6,7 @@
     <title>💪 Pompes & Gainage</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body class="bg-gray-50">
     <div class="max-w-md mx-auto bg-gray-50 h-screen flex flex-col">
@@ -217,6 +218,10 @@
                 </div>
 
                 <div class="bg-white rounded-lg p-4 shadow">
+                    <canvas id="progressionChart"></canvas>
+                </div>
+
+                <div class="bg-white rounded-lg p-4 shadow">
                     <table class="w-full text-left text-sm text-gray-600">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                             <tr>
@@ -268,6 +273,7 @@
         let plankInterval = null;
         let workouts = [];
         let dailyGoal = { pushups: 50, plank: 120 };
+        let progressionChart; // Variable pour stocker l'instance du graphique
 
         // Fonction pour formater le temps
         function formatTime(seconds) {
@@ -432,7 +438,7 @@
         // Fonction pour charger les séances
         async function loadWorkouts() {
             try {
-                const q = query(collection(db, 'workouts'), orderBy('createdAt', 'desc'));
+                const q = query(collection(db, 'workouts'), orderBy('createdAt', 'asc')); // Changement pour un tri par ordre chronologique
                 const querySnapshot = await getDocs(q);
                 workouts = [];
                 querySnapshot.forEach((doc) => {
@@ -482,7 +488,10 @@
                 return;
             }
 
-            container.innerHTML = workouts.slice(0, 10).map(workout => `
+            // Trie les séances dans l'ordre décroissant pour l'historique
+            const sortedWorkouts = [...workouts].sort((a, b) => b.createdAt - a.createdAt);
+
+            container.innerHTML = sortedWorkouts.slice(0, 10).map(workout => `
                 <div class="bg-white p-3 rounded-lg shadow border">
                     <div class="flex justify-between items-start mb-2">
                         <div class="text-xs text-gray-500">${workout.timestamp}</div>
@@ -554,46 +563,130 @@
             document.getElementById('total-plank-yearly').textContent = formatTime(totalPlankTimeYearly);
             document.getElementById('total-sessions-yearly').textContent = workoutsYearly.length;
         }
-
-        // Fonction pour afficher l'évolution dans le nouvel onglet
-        function updateProgressionDisplay(period) {
-            const tableBody = document.getElementById('progression-table-body');
-            tableBody.innerHTML = '';
-            
+        
+        // Fonction pour afficher le graphique de progression
+        function updateProgressionGraph(period) {
             const groupedData = {};
-            
+            const isWeekly = period === 'weekly';
+
             workouts.forEach(workout => {
                 const date = new Date(workout.createdAt);
                 let periodKey;
 
-                if (period === 'weekly') {
-                    periodKey = `Semaine ${getWeekNumber(date)}`;
+                if (isWeekly) {
+                    const year = date.getFullYear();
+                    const weekNo = getWeekNumber(date);
+                    periodKey = `${year}-S${weekNo.toString().padStart(2, '0')}`;
                 } else { // monthly
-                    periodKey = `${date.toLocaleString('fr-FR', { month: 'long', year: 'numeric' })}`;
+                    periodKey = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}`;
                 }
                 
                 if (!groupedData[periodKey]) {
-                    groupedData[periodKey] = { pushups: 0, plankTime: 0, sessions: 0 };
+                    groupedData[periodKey] = { pushups: 0, plankTime: 0, sessions: 0, date };
                 }
                 groupedData[periodKey].pushups += workout.pushups;
                 groupedData[periodKey].plankTime += workout.plankTime;
                 groupedData[periodKey].sessions += 1;
             });
             
-            const sortedKeys = Object.keys(groupedData).sort((a, b) => {
-                if (period === 'weekly') {
-                    const weekA = parseInt(a.match(/\d+/)[0]);
-                    const weekB = parseInt(b.match(/\d+/)[0]);
-                    return weekB - weekA;
-                }
-                return new Date(b) - new Date(a);
-            }).slice(0, 12); // Limite à 12 entrées pour une meilleure lisibilité
-            
-            sortedKeys.forEach(key => {
+            const sortedKeys = Object.keys(groupedData).sort();
+            const labels = sortedKeys.map(key => {
                 const data = groupedData[key];
+                if (isWeekly) {
+                    const year = data.date.getFullYear();
+                    const weekNo = getWeekNumber(data.date);
+                    return `Semaine ${weekNo} (${year})`;
+                }
+                return `${data.date.toLocaleDateString('fr-FR', { month: 'long' })} ${data.date.getFullYear()}`;
+            });
+            const pushupData = sortedKeys.map(key => groupedData[key].pushups);
+            const plankData = sortedKeys.map(key => groupedData[key].plankTime / 60); // Affichage en minutes
+
+            // Destruction de l'instance précédente si elle existe
+            if (progressionChart) {
+                progressionChart.destroy();
+            }
+
+            const ctx = document.getElementById('progressionChart').getContext('2d');
+            progressionChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Total Pompes',
+                        data: pushupData,
+                        borderColor: '#2563EB',
+                        backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                        tension: 0.3,
+                        fill: true
+                    }, {
+                        label: 'Total Gainage (min)',
+                        data: plankData,
+                        borderColor: '#10B981',
+                        backgroundColor: 'rgba(16, 185, 129, 0.2)',
+                        tension: 0.3,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Quantité / Temps (min)'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Période'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: true
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.dataset.label.includes('Gainage')) {
+                                        label += formatTime(context.raw * 60);
+                                    } else {
+                                        label += context.raw;
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Mise à jour du tableau en dessous du graphique
+            updateProgressionTable(groupedData, sortedKeys, period);
+        }
+
+        // Fonction pour afficher l'évolution dans le tableau
+        function updateProgressionTable(groupedData, sortedKeys, period) {
+            const tableBody = document.getElementById('progression-table-body');
+            tableBody.innerHTML = '';
+            
+            const tableSortedKeys = [...sortedKeys].reverse().slice(0, 12);
+            
+            tableSortedKeys.forEach(key => {
+                const data = groupedData[key];
+                const periodLabel = period === 'weekly' ? `Semaine ${getWeekNumber(data.date)}` : `${data.date.toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' })}`;
                 const row = `
                     <tr class="border-b hover:bg-gray-50">
-                        <td class="py-2 px-3">${key}</td>
+                        <td class="py-2 px-3">${periodLabel}</td>
                         <td class="py-2 px-3">${data.pushups}</td>
                         <td class="py-2 px-3">${formatTime(data.plankTime)}</td>
                         <td class="py-2 px-3">${data.sessions}</td>
@@ -634,13 +727,13 @@
             } else if (tab === 'stats') {
                 updateStats();
             } else if (tab === 'progression') {
-                updateProgressionDisplay(document.getElementById('progression-period-select').value);
+                updateProgressionGraph(document.getElementById('progression-period-select').value);
             }
         };
 
         // Événement pour le sélecteur de période dans l'onglet Progression
         document.getElementById('progression-period-select').addEventListener('change', (event) => {
-            updateProgressionDisplay(event.target.value);
+            updateProgressionGraph(event.target.value);
         });
 
         // Gestion des objectifs
