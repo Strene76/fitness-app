@@ -9,13 +9,11 @@
 </head>
 <body class="bg-gray-50">
     <div class="max-w-md mx-auto bg-gray-50 h-screen flex flex-col">
-        <!-- Header -->
         <div class="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-4">
             <h1 class="text-xl font-bold text-center">💪 Pompes & Gainage</h1>
             <p class="text-center text-blue-100 mt-1 text-sm">Votre coach personnel</p>
         </div>
 
-        <!-- Navigation -->
         <div class="bg-white shadow-sm border-b">
             <div class="flex">
                 <button onclick="setActiveTab('workout')" id="tab-workout" class="flex-1 py-3 px-2 text-center font-medium text-blue-600 border-b-2 border-blue-600 bg-blue-50">
@@ -33,11 +31,8 @@
             </div>
         </div>
 
-        <!-- Contenu -->
         <div class="flex-1 overflow-y-auto">
-            <!-- Onglet Entraînement -->
             <div id="workout-tab" class="tab-content p-3 space-y-3">
-                <!-- Stats du jour -->
                 <div class="bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg p-3 text-white">
                     <h2 class="text-sm font-bold mb-2">Aujourd'hui</h2>
                     <div class="grid grid-cols-2 gap-3">
@@ -58,7 +53,6 @@
                     </div>
                 </div>
 
-                <!-- Compteur Pompes -->
                 <div class="bg-white rounded-lg p-4 shadow">
                     <div class="flex items-center justify-between mb-3">
                         <h3 class="text-lg font-bold text-gray-800">💪 Pompes</h3>
@@ -83,7 +77,6 @@
                     </div>
                 </div>
 
-                <!-- Chrono Gainage -->
                 <div class="bg-white rounded-lg p-4 shadow">
                     <div class="flex items-center justify-between mb-3">
                         <h3 class="text-lg font-bold text-gray-800">⏱️ Gainage</h3>
@@ -106,25 +99,20 @@
                     </div>
                 </div>
 
-                <!-- Bouton sauvegarder -->
                 <button onclick="saveWorkout()" id="save-btn" class="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white py-3 rounded-lg font-bold shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed">
                     💾 SAUVEGARDER LA SÉANCE
                 </button>
             </div>
 
-            <!-- Onglet Historique -->
             <div id="history-tab" class="tab-content hidden p-3">
                 <h2 class="text-xl font-bold text-gray-800 mb-3">📈 Historique</h2>
                 <div id="workouts-list" class="space-y-2">
-                    <!-- Les séances seront ajoutées ici dynamiquement -->
-                </div>
+                    </div>
             </div>
 
-            <!-- Onglet Stats -->
             <div id="stats-tab" class="tab-content hidden p-3 space-y-4">
                 <h2 class="text-xl font-bold text-gray-800 mb-3">📊 Statistiques</h2>
                 
-                <!-- Stats générales -->
                 <div class="grid grid-cols-2 gap-3">
                     <div class="bg-gradient-to-br from-blue-500 to-blue-600 p-3 rounded-lg text-white">
                         <div id="total-pushups" class="text-xl font-bold">0</div>
@@ -144,7 +132,54 @@
                     </div>
                 </div>
 
-                <!-- Objectifs -->
+                <h3 class="font-bold text-lg mb-2">Semaine</h3>
+                <div id="stats-weekly" class="grid grid-cols-3 gap-3">
+                    <div class="bg-blue-100 p-3 rounded-lg text-blue-800">
+                        <div id="total-pushups-weekly" class="text-xl font-bold">0</div>
+                        <div class="text-xs opacity-90">Pompes</div>
+                    </div>
+                    <div class="bg-green-100 p-3 rounded-lg text-green-800">
+                        <div id="total-plank-weekly" class="text-xl font-bold">0:00</div>
+                        <div class="text-xs opacity-90">Gainage</div>
+                    </div>
+                    <div class="bg-gray-100 p-3 rounded-lg text-gray-800">
+                        <div id="total-sessions-weekly" class="text-xl font-bold">0</div>
+                        <div class="text-xs opacity-90">Séances</div>
+                    </div>
+                </div>
+
+                <h3 class="font-bold text-lg mb-2">Mois</h3>
+                <div id="stats-monthly" class="grid grid-cols-3 gap-3">
+                    <div class="bg-blue-100 p-3 rounded-lg text-blue-800">
+                        <div id="total-pushups-monthly" class="text-xl font-bold">0</div>
+                        <div class="text-xs opacity-90">Pompes</div>
+                    </div>
+                    <div class="bg-green-100 p-3 rounded-lg text-green-800">
+                        <div id="total-plank-monthly" class="text-xl font-bold">0:00</div>
+                        <div class="text-xs opacity-90">Gainage</div>
+                    </div>
+                    <div class="bg-gray-100 p-3 rounded-lg text-gray-800">
+                        <div id="total-sessions-monthly" class="text-xl font-bold">0</div>
+                        <div class="text-xs opacity-90">Séances</div>
+                    </div>
+                </div>
+
+                <h3 class="font-bold text-lg mb-2">Année</h3>
+                <div id="stats-yearly" class="grid grid-cols-3 gap-3">
+                    <div class="bg-blue-100 p-3 rounded-lg text-blue-800">
+                        <div id="total-pushups-yearly" class="text-xl font-bold">0</div>
+                        <div class="text-xs opacity-90">Pompes</div>
+                    </div>
+                    <div class="bg-green-100 p-3 rounded-lg text-green-800">
+                        <div id="total-plank-yearly" class="text-xl font-bold">0:00</div>
+                        <div class="text-xs opacity-90">Gainage</div>
+                    </div>
+                    <div class="bg-gray-100 p-3 rounded-lg text-gray-800">
+                        <div id="total-sessions-yearly" class="text-xl font-bold">0</div>
+                        <div class="text-xs opacity-90">Séances</div>
+                    </div>
+                </div>
+
                 <div class="bg-white p-4 rounded-lg shadow">
                     <h3 class="font-bold text-lg mb-3">🎯 Objectifs quotidiens</h3>
                     <div class="space-y-3">
@@ -168,7 +203,6 @@
         </div>
     </div>
 
-    <!-- Loading overlay -->
     <div id="loading" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
         <div class="bg-white p-6 rounded-xl text-center">
             <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
@@ -176,7 +210,6 @@
         </div>
     </div>
 
-    <!-- Firebase SDK -->
     <script type="module">
         // Import Firebase modules
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
@@ -235,26 +268,26 @@
 
             // Mise à jour du chrono gainage
             document.getElementById('plank-display').textContent = formatTime(plankTime);
-            document.getElementById('plank-display').className = `text-6xl font-bold mb-6 ${isPlankActive ? 'text-green-600' : 'text-gray-600'}`;
+            document.getElementById('plank-display').className = `text-4xl font-bold mb-3 ${isPlankActive ? 'text-green-600' : 'text-gray-600'}`;
 
             // Mise à jour du statut du gainage
             const statusDiv = document.getElementById('plank-status');
             if (isPlankActive) {
-                statusDiv.className = 'px-3 py-1 rounded-full bg-green-100';
-                statusDiv.innerHTML = '<span class="font-semibold text-green-600">EN COURS</span>';
+                statusDiv.className = 'px-2 py-1 rounded-full bg-green-100';
+                statusDiv.innerHTML = '<span class="font-semibold text-green-600 text-xs">EN COURS</span>';
             } else {
-                statusDiv.className = 'px-3 py-1 rounded-full bg-gray-100';
-                statusDiv.innerHTML = '<span class="font-semibold text-gray-600">ARRÊTÉ</span>';
+                statusDiv.className = 'px-2 py-1 rounded-full bg-gray-100';
+                statusDiv.innerHTML = '<span class="font-semibold text-gray-600 text-xs">ARRÊTÉ</span>';
             }
 
             // Mise à jour du bouton plank
             const toggleBtn = document.getElementById('plank-toggle');
             if (isPlankActive) {
-                toggleBtn.className = 'px-8 py-3 rounded-lg font-semibold text-lg flex items-center gap-2 transition-colors bg-red-500 hover:bg-red-600 text-white';
-                toggleBtn.innerHTML = '<i class="fas fa-pause"></i> PAUSE';
+                toggleBtn.className = 'px-6 py-2 rounded-lg font-semibold flex items-center gap-2 transition-colors bg-red-500 hover:bg-red-600 text-white';
+                toggleBtn.innerHTML = '<i class="fas fa-pause text-sm"></i> PAUSE';
             } else {
-                toggleBtn.className = 'px-8 py-3 rounded-lg font-semibold text-lg flex items-center gap-2 transition-colors bg-green-500 hover:bg-green-600 text-white';
-                toggleBtn.innerHTML = '<i class="fas fa-play"></i> START';
+                toggleBtn.className = 'px-6 py-2 rounded-lg font-semibold flex items-center gap-2 transition-colors bg-green-500 hover:bg-green-600 text-white';
+                toggleBtn.innerHTML = '<i class="fas fa-play text-sm"></i> START';
             }
 
             // Mise à jour des stats du jour
@@ -363,7 +396,8 @@
                 const querySnapshot = await getDocs(q);
                 workouts = [];
                 querySnapshot.forEach((doc) => {
-                    workouts.push({ id: doc.id, ...doc.data() });
+                    const data = doc.data();
+                    workouts.push({ id: doc.id, ...data, createdAt: data.createdAt.toDate() });
                 });
                 updateHistoryDisplay();
             } catch (error) {
@@ -434,6 +468,7 @@
 
         // Fonction pour mettre à jour les statistiques
         function updateStats() {
+            // Stats générales (toutes périodes confondues)
             const totalPushups = workouts.reduce((sum, w) => sum + w.pushups, 0);
             const totalPlankTime = workouts.reduce((sum, w) => sum + w.plankTime, 0);
             const avgPushups = workouts.length > 0 ? Math.round(totalPushups / workouts.length) : 0;
@@ -442,6 +477,42 @@
             document.getElementById('total-plank').textContent = formatTime(totalPlankTime);
             document.getElementById('total-sessions').textContent = workouts.length;
             document.getElementById('avg-pushups').textContent = avgPushups;
+
+            // Calcul des dates de début pour chaque période
+            const now = new Date();
+            
+            // Semaine
+            const startOfWeek = new Date(now.getFullYear(), now.getMonth(), now.getDate() - (now.getDay() === 0 ? 6 : now.getDay() - 1));
+            const workoutsWeekly = workouts.filter(w => new Date(w.createdAt) >= startOfWeek);
+            const totalPushupsWeekly = workoutsWeekly.reduce((sum, w) => sum + w.pushups, 0);
+            const totalPlankTimeWeekly = workoutsWeekly.reduce((sum, w) => sum + w.plankTime, 0);
+
+            // Mois
+            const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+            const workoutsMonthly = workouts.filter(w => new Date(w.createdAt) >= startOfMonth);
+            const totalPushupsMonthly = workoutsMonthly.reduce((sum, w) => sum + w.pushups, 0);
+            const totalPlankTimeMonthly = workoutsMonthly.reduce((sum, w) => sum + w.plankTime, 0);
+
+            // Année
+            const startOfYear = new Date(now.getFullYear(), 0, 1);
+            const workoutsYearly = workouts.filter(w => new Date(w.createdAt) >= startOfYear);
+            const totalPushupsYearly = workoutsYearly.reduce((sum, w) => sum + w.pushups, 0);
+            const totalPlankTimeYearly = workoutsYearly.reduce((sum, w) => sum + w.plankTime, 0);
+
+            // Mise à jour de l'affichage des stats hebdomadaires
+            document.getElementById('total-pushups-weekly').textContent = totalPushupsWeekly;
+            document.getElementById('total-plank-weekly').textContent = formatTime(totalPlankTimeWeekly);
+            document.getElementById('total-sessions-weekly').textContent = workoutsWeekly.length;
+            
+            // Mise à jour de l'affichage des stats mensuelles
+            document.getElementById('total-pushups-monthly').textContent = totalPushupsMonthly;
+            document.getElementById('total-plank-monthly').textContent = formatTime(totalPlankTimeMonthly);
+            document.getElementById('total-sessions-monthly').textContent = workoutsMonthly.length;
+            
+            // Mise à jour de l'affichage des stats annuelles
+            document.getElementById('total-pushups-yearly').textContent = totalPushupsYearly;
+            document.getElementById('total-plank-yearly').textContent = formatTime(totalPlankTimeYearly);
+            document.getElementById('total-sessions-yearly').textContent = workoutsYearly.length;
         }
 
         // Gestion des onglets
