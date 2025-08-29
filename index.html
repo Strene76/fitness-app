@@ -290,6 +290,15 @@
             return { totalPushups, totalPlank };
         }
 
+        // Fonction pour calculer le numéro de la semaine (ISO 8601)
+        function getWeekNumber(d) {
+            d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+            d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
+            var yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+            var weekNo = Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+            return weekNo;
+        }
+
         // Mise à jour de l'affichage
         function updateDisplay() {
             // Mise à jour du compteur de pompes
@@ -552,18 +561,15 @@
             tableBody.innerHTML = '';
             
             const groupedData = {};
-            const now = new Date();
-
+            
             workouts.forEach(workout => {
                 const date = new Date(workout.createdAt);
                 let periodKey;
 
                 if (period === 'weekly') {
-                    const startOfWeek = new Date(date.getFullYear(), date.getMonth(), date.getDate() - (date.getDay() === 0 ? 6 : date.getDay() - 1));
-                    const weekNumber = Math.ceil((date - startOfWeek) / (7 * 24 * 60 * 60 * 1000));
-                    periodKey = `${startOfWeek.toLocaleDateString('fr-FR')}`;
+                    periodKey = `Semaine ${getWeekNumber(date)}`;
                 } else { // monthly
-                    periodKey = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}`;
+                    periodKey = `${date.toLocaleString('fr-FR', { month: 'long', year: 'numeric' })}`;
                 }
                 
                 if (!groupedData[periodKey]) {
@@ -574,13 +580,20 @@
                 groupedData[periodKey].sessions += 1;
             });
             
-            const sortedKeys = Object.keys(groupedData).sort().reverse();
+            const sortedKeys = Object.keys(groupedData).sort((a, b) => {
+                if (period === 'weekly') {
+                    const weekA = parseInt(a.match(/\d+/)[0]);
+                    const weekB = parseInt(b.match(/\d+/)[0]);
+                    return weekB - weekA;
+                }
+                return new Date(b) - new Date(a);
+            }).slice(0, 12); // Limite à 12 entrées pour une meilleure lisibilité
             
             sortedKeys.forEach(key => {
                 const data = groupedData[key];
                 const row = `
                     <tr class="border-b hover:bg-gray-50">
-                        <td class="py-2 px-3">${period === 'weekly' ? `Semaine du ${key}` : `${key}`}</td>
+                        <td class="py-2 px-3">${key}</td>
                         <td class="py-2 px-3">${data.pushups}</td>
                         <td class="py-2 px-3">${formatTime(data.plankTime)}</td>
                         <td class="py-2 px-3">${data.sessions}</td>
