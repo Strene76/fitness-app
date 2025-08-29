@@ -28,6 +28,10 @@
                     <i class="fas fa-chart-line text-sm mb-1 block"></i>
                     <span class="text-xs">Stats</span>
                 </button>
+                <button onclick="setActiveTab('progression')" id="tab-progression" class="flex-1 py-3 px-2 text-center font-medium text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-trophy text-sm mb-1 block"></i>
+                    <span class="text-xs">Progression</span>
+                </button>
             </div>
         </div>
 
@@ -198,6 +202,33 @@
                                    class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
                         </div>
                     </div>
+                </div>
+            </div>
+
+            <div id="progression-tab" class="tab-content hidden p-3 space-y-4">
+                <h2 class="text-xl font-bold text-gray-800 mb-3">📈 Évolution</h2>
+
+                <div class="flex items-center space-x-2 mb-4">
+                    <label for="progression-period-select" class="text-sm font-medium text-gray-700">Période :</label>
+                    <select id="progression-period-select" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                        <option value="weekly">Par semaine</option>
+                        <option value="monthly">Par mois</option>
+                    </select>
+                </div>
+
+                <div class="bg-white rounded-lg p-4 shadow">
+                    <table class="w-full text-left text-sm text-gray-600">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                            <tr>
+                                <th scope="col" class="py-2 px-3">Période</th>
+                                <th scope="col" class="py-2 px-3">Pompes</th>
+                                <th scope="col" class="py-2 px-3">Gainage</th>
+                                <th scope="col" class="py-2 px-3">Séances</th>
+                            </tr>
+                        </thead>
+                        <tbody id="progression-table-body">
+                            </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -515,6 +546,60 @@
             document.getElementById('total-sessions-yearly').textContent = workoutsYearly.length;
         }
 
+        // Fonction pour afficher l'évolution dans le nouvel onglet
+        function updateProgressionDisplay(period) {
+            const tableBody = document.getElementById('progression-table-body');
+            tableBody.innerHTML = '';
+            
+            const groupedData = {};
+            const now = new Date();
+
+            workouts.forEach(workout => {
+                const date = new Date(workout.createdAt);
+                let periodKey;
+
+                if (period === 'weekly') {
+                    const startOfWeek = new Date(date.getFullYear(), date.getMonth(), date.getDate() - (date.getDay() === 0 ? 6 : date.getDay() - 1));
+                    const weekNumber = Math.ceil((date - startOfWeek) / (7 * 24 * 60 * 60 * 1000));
+                    periodKey = `${startOfWeek.toLocaleDateString('fr-FR')}`;
+                } else { // monthly
+                    periodKey = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}`;
+                }
+                
+                if (!groupedData[periodKey]) {
+                    groupedData[periodKey] = { pushups: 0, plankTime: 0, sessions: 0 };
+                }
+                groupedData[periodKey].pushups += workout.pushups;
+                groupedData[periodKey].plankTime += workout.plankTime;
+                groupedData[periodKey].sessions += 1;
+            });
+            
+            const sortedKeys = Object.keys(groupedData).sort().reverse();
+            
+            sortedKeys.forEach(key => {
+                const data = groupedData[key];
+                const row = `
+                    <tr class="border-b hover:bg-gray-50">
+                        <td class="py-2 px-3">${period === 'weekly' ? `Semaine du ${key}` : `${key}`}</td>
+                        <td class="py-2 px-3">${data.pushups}</td>
+                        <td class="py-2 px-3">${formatTime(data.plankTime)}</td>
+                        <td class="py-2 px-3">${data.sessions}</td>
+                    </tr>
+                `;
+                tableBody.innerHTML += row;
+            });
+
+            if (Object.keys(groupedData).length === 0) {
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="4" class="text-center py-4 text-gray-500">
+                            Aucune donnée de progression pour cette période.
+                        </td>
+                    </tr>
+                `;
+            }
+        }
+
         // Gestion des onglets
         window.setActiveTab = function(tab) {
             activeTab = tab;
@@ -535,8 +620,15 @@
                 updateHistoryDisplay();
             } else if (tab === 'stats') {
                 updateStats();
+            } else if (tab === 'progression') {
+                updateProgressionDisplay(document.getElementById('progression-period-select').value);
             }
         };
+
+        // Événement pour le sélecteur de période dans l'onglet Progression
+        document.getElementById('progression-period-select').addEventListener('change', (event) => {
+            updateProgressionDisplay(event.target.value);
+        });
 
         // Gestion des objectifs
         document.getElementById('pushup-goal-slider').addEventListener('input', function(e) {
